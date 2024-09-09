@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { Session } from "next-auth";
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 
-export { default } from "next-auth/middleware"
+export { default } from "next-auth/middleware";
 
 // const res = NextResponse.next();
 // export default withAuth(
@@ -15,7 +14,7 @@ export { default } from "next-auth/middleware"
 
 //     const currentPath = new URL(req.url).pathname;
 //     if (session) {
-   
+
 //     }
 //     return res;
 //   },
@@ -26,4 +25,4 @@ export { default } from "next-auth/middleware"
 //   }
 // );
 
-export const config = { matcher: [ "/dashboard/:path*"] };
+export const config = { matcher: ["/dashboard/:path*"] };
