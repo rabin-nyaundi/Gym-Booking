@@ -6,28 +6,32 @@ import {
   DisclosurePanel,
 } from "@headlessui/react";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { FolderIcon, HomeIcon } from "@heroicons/react/24/outline";
+import {
+  FolderIcon,
+  HomeIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 
 const navigation: SidebarItem[] = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
+  { name: "Dashboard", href: "/dashboard", icon: HomeIcon, current: true },
   {
     name: "Booking",
     icon: FolderIcon,
     current: false,
-    href: "#",
-    children: [
-      { name: "All", href: "#" },
-      { name: "Today", href: "#" },
-    ],
+    href: "/dashboard/booking",
+    // children: [
+    //   { name: "All", href: "#" },
+    //   { name: "Today", href: "#" },
+    // ],
   },
   {
-    name: "Sessions",
-    icon: FolderIcon,
+    name: "Profile",
+    icon: UserCircleIcon,
     current: false,
-    href: "#",
+    href: "/dashboard/profile",
   },
 ];
 
@@ -125,13 +129,13 @@ export default async function Sidebar() {
               className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
             >
               {session?.user && (
-                // <Image
-                //   alt={session?.user?.name!}
-                //   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                //   className="h-8 w-8 rounded-full bg-gray-50"
-                //   width={50}
-                //   height={50}
-                <span></span>
+                <Image
+                  alt={session?.user?.name!}
+                  src="/images/user.jpg"
+                  className="h-8 w-8 rounded-full bg-gray-50"
+                  width={50}
+                  height={50}
+                />
               )}
               <span className="sr-only">Your profile</span>
               <span aria-hidden="true">{session?.user?.name}</span>

@@ -17,7 +17,17 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({ data: sessions });
+    const sessionCounts = sessions.map((session) => {
+      const bookingCount = session.bookings.length;
+
+      return {
+        sessionId: session.id,
+        slot: session.slot,
+        count: bookingCount,
+      };
+    });
+
+    return NextResponse.json({ data: sessionCounts });
   } catch (error: any) {
     const message = error?.message || error;
     console.log(error?.response?.data);

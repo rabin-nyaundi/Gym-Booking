@@ -1,17 +1,28 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { subDays } from "date-fns";
 
 export async function GET() {
   try {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    const oneWeekAgo = subDays(new Date(), 30);
 
-    const sessions = await prisma.trainingSession.findMany({
+    const sessions = await prisma.booking.findMany({
+      where: {
+        // trainingDate: {
+        //   gte: new Date(oneWeekAgo.setHours(0, 0, 0, 0)),
+        //   lt: new Date(oneWeekAgo.setHours(23, 59, 59, 999)),
+        // },
+      },
+
       include: {
-        bookings: {
+        user: {
           select: {
-            trainingDate: true,
+            name: true,
+          },
+        },
+        session: {
+          select: {
+            slot: true,
           },
         },
       },

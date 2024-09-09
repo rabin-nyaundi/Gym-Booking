@@ -10,15 +10,17 @@ datasource db {
 
 model User {
   id            Int            @id @default(autoincrement())
+  name          String
   email         String         @unique
   password      String
-  name          String
+  roleId        String         @default("user")
   role          Role           @default(USER)
   bookings      Booking[]
   notifications Notification[]
-  createdAt     DateTime       @default(now())
-  // updatedAt DateTime @updatedAt
   Session       Session[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  userRoleId    String?
 }
 
 model Session {
@@ -30,44 +32,37 @@ model Session {
   updatedAt    DateTime @updatedAt
 }
 
-model TrainingSession {
-  id        Int       @id @default(autoincrement())
-  timeSlot  String
-  capacity  Int       @default(0)
-  // maxCapacity  Int       @default(6)
-  date      DateTime
-  bookings  Booking[]
-  createdAt DateTime  @default(now())
-  userId    Int?
+model Notification {
+  id        String   @id @default(uuid())
+  userId    Int
+  message   String
+  sentAt    DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model SessionBooking{
-  trainingSessionId Int
-  bookingId Int
+model TrainingSession {
+  id        Int       @id @default(autoincrement())
+  slot      String
+  capacity  Int       @default(5)
+  bookings  Booking[]
   createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 model Booking {
-  id           Int             @id @default(autoincrement())
+  id           String          @id @default(uuid())
   userId       Int
   sessionId    Int
-  status       String          @default("booked") // "booked", "canceled", "rejected"
+  trainingDate DateTime
   user         User            @relation(fields: [userId], references: [id])
   session      TrainingSession @relation(fields: [sessionId], references: [id])
   createdAt    DateTime        @default(now())
-  trainingDate DateTime
-  // updatedAt DateTime @updatedAt
-}
+  updatedAt    DateTime        @updatedAt
+  status       BookingStatus   @default(Booked)
 
-model Notification {
-  id      Int      @id @default(autoincrement())
-  userId  Int
-  message String
-  sentAt  DateTime
-  user    User     @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now())
-  // updatedAt DateTime @updatedAt
+  @@unique([userId, trainingDate]) // Ensures one booking per user per day
 }
 
 enum Role {
@@ -75,4 +70,11 @@ enum Role {
   SALES_USER
   ADMIN
   SUPERADMIN
+}
+
+enum BookingStatus {
+  Booked
+  Cancelled
+  Rejected
+  Deleted
 }

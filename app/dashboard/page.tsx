@@ -1,14 +1,10 @@
 import UserDashboard from "@/components/dashboard/UserDashboard";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import React from "react";
 
-async function page() {
+export default function page() {
   return (
-    <div className="w-full flex h-full">
+    <div className="flex flex-col w-full  h-full">
       <UserDashboard />
     </div>
   );
 }
-
-export default page;

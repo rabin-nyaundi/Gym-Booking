@@ -25,7 +25,7 @@ export default function Home() {
           </div>
           <div className="flex justify-center gap-4 lg:gap-8">
             <Button className="bg-[#ff9f1c]  px-5 lg:px-10 font-bold rounded-full text-black hover:text-white">
-              Get Started!
+              <Link href={"/auth/register"}> Get Started!</Link>
             </Button>
 
             <Button

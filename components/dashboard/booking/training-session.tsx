@@ -1,51 +1,31 @@
 "use client";
 
+import { TrainingSessionWithBookings } from "@/app/dashboard/booking/page";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { BookingStatus } from "@/types/types";
 import { TrainingSession } from "@prisma/client";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const sessions = [
-  { time: "05:00 AM - 07:00 AM", available: true },
-  { time: "07:00 AM - 09:00 AM", available: true },
-  { time: "09:00 AM - 11:00 AM", available: true },
-  { time: "11:00 AM - 01:00 PM", available: true },
-  { time: "01:00 PM - 03:00 PM", available: false }, // Break time
-  { time: "03:00 PM - 05:00 PM", available: true },
-  { time: "05:00 PM - 07:00 PM", available: true },
-];
+export default function Sessions({
+  sessions,
+  handleCloseSheet,
+}: {
+  sessions: TrainingSessionWithBookings[];
+  handleCloseSheet: () => void;
+}) {
+  const [availableSessions, setAvailableSessions] =
+    useState<TrainingSessionWithBookings>();
 
-const TrainingSessions: React.FC = () => {
-  const [sessions, setSessions] = useState<TrainingSession[]>();
-
-  async function getTrainingSessions() {
-    try {
-      const response = await axios.get("/api/training-session");
-
-      const { data } = response.data;
-
-      setSessions(data);
-
-      console.log("====================================");
-      console.log(data);
-      console.log("====================================");
-    } catch (error: any) {
-      console.log("====================================");
-      console.log(error);
-      console.log("====================================");
-    }
-  }
-
-  async function handleBooking() {
+  async function handleBooking(session: TrainingSession) {
     const response = await fetch("/api/booking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        sessionId: 1, // Replace with the actual session ID
-        status: "booked", // Optional, defaults to 'booked'
+        sessionId: session.id,
+        status: BookingStatus.booked,
       }),
     });
 
@@ -57,6 +37,7 @@ const TrainingSessions: React.FC = () => {
         title: "Failed.",
         description: `${data.error}`,
       });
+      handleCloseSheet();
       return;
     }
     if (response.ok) {
@@ -73,11 +54,8 @@ const TrainingSessions: React.FC = () => {
         description: "Failed to book the session.",
       });
     }
+    handleCloseSheet();
   }
-
-  useEffect(() => {
-    getTrainingSessions();
-  }, []);
 
   return (
     <div className="max-w-3xl flex flex-col h-auto mx-auto p-2">
@@ -87,32 +65,28 @@ const TrainingSessions: React.FC = () => {
             <div
               key={index}
               className={`border p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 ${
-                session.capacity < 5
+                session.capacity >= 5
                   ? "bg-slate"
                   : "bg-red-100 cursor-not-allowed"
               }`}
             >
               <h3 className="text-sm font-semibold text-gray-700">
-                {session.timeSlot}
+                {session.slot}
               </h3>
               <Button
                 onClick={async () => {
-                  await handleBooking();
+                  await handleBooking(session);
                 }}
                 className={`mt-4 rounded-md text-white ${
-                  session.capacity < 5
-                    ? "bg-primary"
-                    : "bg-gray-500 cursor-not-allowed"
+                  session ? "bg-primary" : "bg-gray-500 cursor-not-allowed"
                 }`}
-                disabled={session.maxCapacity === session.capacity}
+                disabled={!session}
               >
-                {session.capacity < 5 ? "Book Now" : "Not Available"}
+                {session ? "Book Now" : "Not Available"}
               </Button>
             </div>
           ))}
       </div>
     </div>
   );
-};
-
-export default TrainingSessions;
+}
