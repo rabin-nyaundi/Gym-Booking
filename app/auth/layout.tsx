@@ -21,7 +21,7 @@ export default function AuthLayout({
             <div className="flex h-10 justify-center items-center z-10 inset-10">
               <div className="flex gap-3 justify-center items-center">
                 <GiWeightLiftingUp className=" h-9 w-9" />
-                <h1 className="text-xl font-bold">TechnoGym</h1>
+                <h1 className="text-xl font-bold">JTL Wellness Club</h1>
               </div>
             </div>
 

@@ -16,7 +16,7 @@ export default function BottomNavigationBar() {
               href={"/dashboard"}
             >
               <CiHome className="h-6 w-6 text-gray-700 dark:text-inherit font-bold" />
-              <span className="text-sm font-semibold text-gray-800 dark:text-inherit">
+              <span className="text-xs font-semibold text-gray-800 dark:text-inherit">
                 Home
               </span>
             </Link>
@@ -27,7 +27,7 @@ export default function BottomNavigationBar() {
               href={"/dashboard/booking"}
             >
               <CiCalendar className="h-6 w-6 text-gray-700 dark:text-inherit font-bold" />
-              <span className="text-sm font-semibold text-gray-800 dark:text-inherit">
+              <span className="text-xs font-semibold text-gray-800 dark:text-inherit">
                 Booking
               </span>
             </Link>
@@ -38,7 +38,7 @@ export default function BottomNavigationBar() {
               href={"/dashboard/profile"}
             >
               <CiUser className="h-6 w-6 text-gray-700 dark:text-inherit font-bold" />
-              <span className="text-sm font-semibold text-gray-800 dark:text-inherit">
+              <span className="text-xs font-semibold text-gray-800 dark:text-inherit">
                 Profile
               </span>
             </Link>

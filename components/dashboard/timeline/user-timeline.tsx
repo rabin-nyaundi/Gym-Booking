@@ -71,20 +71,20 @@ export default function UserTimeline() {
                       )}
                     >
                       {activity.status === BookingStatus.Booked ? (
-                        <div className="bg-green-500 text-white p-2 rounded-md">
-                          <CheckCircleIcon className="h-6 w-6" />
+                        <div className=" text-white p-2 rounded-md">
+                          <CheckCircleIcon className="h-6 w-6 bg-green-500 rounded-xl" />
                         </div>
                       ) : activity.status === BookingStatus.Cancelled ? (
-                        <div className="bg-yellow-500 text-white p-2 rounded-md">
-                          <XCircleIcon className="h-6 w-6" />
+                        <div className=" text-white p-2 rounded-md">
+                          <XCircleIcon className="h-6 w-6 bg-yellow-500 rounded-xl" />
                         </div>
                       ) : activity.status == BookingStatus.Rejected ? (
-                        <div className="bg-red-500 text-white p-2 rounded-md">
-                          <ExclamationCircleIcon className="h-6 w-6" />
+                        <div className=" text-white p-2 rounded-md">
+                          <ExclamationCircleIcon className="h-6 w-6 bg-gray-500 rounded-xl" />
                         </div>
                       ) : (
-                        <div className="bg-gray-500 text-white p-2 rounded-md">
-                          <TrashIcon className="h-6 w-6" />
+                        <div className=" text-white p-2 rounded-md">
+                          <TrashIcon className="h-6 w-6 bg-red-500 rounded-xl" />
                         </div>
                       )}
                     </span>

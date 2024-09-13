@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import React from "react";
 import { signOut } from "next-auth/react";
+import { CiLogout } from "react-icons/ci";
 
 export default function TopBar() {
   const { setTheme } = useTheme();
@@ -18,17 +19,18 @@ export default function TopBar() {
     <div className="flex flex-col w-full h-16 justify-center lg:px-10 bg-white dark:bg-inherit pr-2 border-b">
       <div className="flex justify-end items-center">
         {/* Topbar */}
-        <div className="flex gap-4">
+        <div className="flex items-center justify-center gap-4">
           <Button
+            className="gap-2"
             variant={"outline"}
             size={"sm"}
             onClick={async () => {
               await signOut();
             }}
           >
-            Logout
+            <CiLogout className="h-4 w-4" /> <span>Logout</span>
           </Button>
-          <DropdownMenu>
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">
                 <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -47,7 +49,7 @@ export default function TopBar() {
                 System
               </DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          </DropdownMenu> */}
         </div>
       </div>
     </div>

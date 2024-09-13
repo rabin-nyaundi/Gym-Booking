@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { useSession } from "next-auth/react";
 import AdminBookings from "@/components/dashboard/booking/admin-all-bookings";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
@@ -113,21 +114,79 @@ export default function Page() {
                   Book Session
                 </Button>
               </div>
+
               <div className="flex h-auto flex-col p-3">
-                <span className="text-xl font-semibold">Upcoming session</span>
+                <span className="text-base lg:text-lg font-semibold">
+                  Today session
+                </span>
                 <div className="flex flex-1 w-full h-full flex-col">
                   {bookings && (
                     <BookingListView
-                      bookings={bookings.filter(
-                        (booking) => booking.status === BookingStatus.Booked
-                      )}
+                      bookings={bookings.filter((booking) => {
+                        let today = new Date();
+                        today.setHours(0, 0, 0, 0);
+
+                        let trainingDate = new Date(booking.trainingDate);
+                        trainingDate.setHours(0, 0, 0, 0);
+
+                        return (
+                          booking.status === BookingStatus.Booked &&
+                          trainingDate.getTime() === today.getTime()
+                        );
+                      })}
+                    />
+                  )}
+                </div>
+              </div>
+              <div className="flex h-auto flex-col p-3">
+                <span className="text-base lg:text-lg font-semibold">
+                  Upcoming sessions
+                </span>
+                <div className="flex flex-1 w-full h-full flex-col">
+                  {bookings && (
+                    // <BookingListView
+                    //   bookings={bookings
+                    //     .filter((booking) => {
+                    //       const isBooked =
+                    //         booking.status === BookingStatus.Booked;
+                    //       const today = new Date();
+                    //       const endOfToday = new Date(
+                    //         today.setHours(23, 59, 59, 999)
+                    //       );
+                    //       const bookingDate = new Date(booking?.trainingDate);
+
+                    //       const isTodayOrEarlier = bookingDate <= endOfToday;
+
+                    //       return isBooked && isTodayOrEarlier;
+                    //     })
+                    //     .map((booking) => ({
+                    //       ...booking,
+                    //       status: booking.status,
+                    //     }))}
+                    // />
+
+                    <BookingListView
+                      bookings={bookings.filter((booking) => {
+                        let tomorrow = new Date(new Date().getDate() + 1);
+                        tomorrow.setHours(0, 0, 0, 0);
+
+                        let trainingDate = new Date(booking.trainingDate);
+                        trainingDate.setHours(23, 59, 59, 999);
+
+                        return (
+                          booking.status === BookingStatus.Booked &&
+                          trainingDate.getTime() >= tomorrow.getTime()
+                        );
+                      })}
                     />
                   )}
                 </div>
               </div>
 
               <div className="flex h-full flex-1 flex-col p-3">
-                <span className="text-xl font-semibold">Prevoius Sessions</span>
+                <span className="text-base lg:text-lg font-semibold">
+                  Past bookings
+                </span>
                 <div className="flex flex-1 w-full h-full flex-col">
                   {bookings && (
                     <BookingListView
@@ -173,6 +232,7 @@ function BookingListView({ bookings }: { bookings: BookingSession[] }) {
   const [isloading, setIsloading] = useState<boolean>(false);
   const [deleteBookingId, setDeleteBookingId] = useState<string>("");
   const [cancelBookingId, setCancelBookingId] = useState<string>("");
+
   async function handleCancelBooking(status: BookingStatus, bookingId: string) {
     setIsloading(true);
     try {
@@ -234,16 +294,19 @@ function BookingListView({ bookings }: { bookings: BookingSession[] }) {
                       ? "bg-primary"
                       : "bg-gray-400"
                   }`,
-                  "flex w-16 text-xs flex-shrink-0 items-center justify-center rounded-l-md  font-bold px-2 text-white"
+                  "flex w-16 lg:w-24 text-xs flex-shrink-0 items-center justify-center rounded-l-md  font-semibold px-2 text-white"
                 )}
               >
                 {booking.session.slot}
               </div>
               <div className="flex flex-1 items-center justify-between truncate rounded-r-md border-b border-r border-t border-gray-200 bg-white">
-                <div className="flex-1 truncate px-4 py-2 text-sm">
-                  <span className="font-medium text-gray-900 hover:text-gray-600">
+                <div className="flex-1 truncate px-2 lg:px-4 py-2 text-sm">
+                  <span className="font-medium flex text-sm lg:text-base lg:gap-2 gap-1 text-gray-900 hover:text-gray-600">
                     Training Date:{" "}
                     {new Date(booking.trainingDate).toLocaleDateString()}
+                    <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-500/10">
+                      {booking.status}
+                    </span>
                   </span>
                   <p className="text-gray-500">
                     Created At:{" "}
@@ -253,7 +316,7 @@ function BookingListView({ bookings }: { bookings: BookingSession[] }) {
                 <div className="flex-shrink-0 pr-2">
                   {booking.status === BookingStatus.Booked ? (
                     <Button
-                      className="bg-yellow-500 hover:bg-yellow-600 text-white"
+                      className=" hover:bg-yellow-600 text-xs lg:text-sm lg:gap-2 px-1 lg:px-2 py-0 text-black hover:text-white"
                       disabled={isloading}
                       onClick={() => {
                         setCancelBookingId(booking.id);
@@ -262,29 +325,35 @@ function BookingListView({ bookings }: { bookings: BookingSession[] }) {
                           booking.id
                         );
                       }}
-                      variant={"destructive"}
+                      variant={"outline"}
                       type="button"
                     >
-                      <span className="sr-only">Open options</span>
-                      {isloading && cancelBookingId === booking.id
-                        ? "Canceling"
-                        : "Cancel"}
+                      <XMarkIcon className="w-5 font-extrabold h-5" />
+                      <span className="hidden lg:block">
+                        {" "}
+                        {isloading && cancelBookingId === booking.id
+                          ? "Canceling"
+                          : "Cancel"}
+                      </span>
                     </Button>
                   ) : (
                     <Button
-                      className="bg-red-600 hover:bg-red-700 text-white"
+                      className=" hover:bg-red-700 hover:text-white px-1 lg:gap-2 lg:px-2 text-red-500"
                       disabled={isloading}
                       onClick={() => {
                         setDeleteBookingId(booking.id);
                         handleDeleteBooking(booking.id);
                       }}
-                      variant={"destructive"}
+                      variant={"outline"}
                       type="button"
                     >
                       <span className="sr-only">Open options</span>
-                      {isloading && deleteBookingId === booking.id
-                        ? "Deleting"
-                        : "Delete"}
+                      <TrashIcon className="w-5 h-5" />
+                      <span className="hidden lg:block">
+                        {isloading && deleteBookingId === booking.id
+                          ? "Deleting"
+                          : "Delete"}
+                      </span>
                     </Button>
                   )}
                 </div>

@@ -13,7 +13,7 @@ export default async function MyBookings() {
       {/* <div className="flex flex-col w-full h-auto">
         <GroupedBookingBySlot />
       </div> */}
-      <div className="flex gap-4 flex-col h-full w-full lg:p-4 border rounded-xl">
+      <div className="flex gap-4 p-2 flex-col h-full w-full lg:p-4 border rounded-xl">
         <h3 className="font-medium">
           {session?.user.role === Role.ADMIN ? "All Bookings" : "My Activity"}
         </h3>

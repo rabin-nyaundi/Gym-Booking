@@ -112,8 +112,8 @@ export default function RegistrationForm() {
       </div>
       <div className="flex h-full w-full flex-col items-center justify-center gap-4  ">
         <div className="flex h-auto w-full max-w-xl flex-col items-center justify-center gap-4">
-          <h2 className="text-center">Sign In to your account</h2>
-          <h6 className="text-center">
+          <h2 className="text-center lg:text-2xl">Sign In to your account</h2>
+          <h6 className="text-center text-sm">
             Enter your email and Password to login.
           </h6>
           <Form {...form}>

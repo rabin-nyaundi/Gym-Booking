@@ -5,7 +5,10 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import {
+  ChevronDoubleLeftIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/20/solid";
 import {
   FolderIcon,
   HomeIcon,
@@ -43,7 +46,7 @@ export default async function Sidebar() {
   const session = await getServerSession(authOptions);
   return (
     <div className="hidden lg:flex h-screen bg-gray-100 dark:bg-inherit lg:w-72 flex-col gap-y-5 overflow-y-auto border-r border-gray-200 px-2 lg:px-6">
-      <div className="flex h-24 shrink-0 items-center">
+      <div className="flex justify-between h-24 shrink-0 items-center">
         {/* <Image
           alt={"Your Company"}
           src="/gym.jpg"
@@ -52,13 +55,16 @@ export default async function Sidebar() {
           width={200}
         /> */}
         <p className="font-bold hidden lg:block font-sans lg:text-xl 2xl:text-2xl">
-          Techno Gym
+          JTL Wellness Club
         </p>
 
         <span className="lg:hidden font-bold font-mono block">
-          Techno <br />
-          Gym
+          JWC
         </span>
+
+        {/* <div className="text-center">
+          <ChevronDoubleLeftIcon className="h-8 w-8" />
+        </div> */}
       </div>
       <nav className="flex flex-1 flex-col">
         <ul role="list" className="flex flex-1 flex-col gap-y-7">

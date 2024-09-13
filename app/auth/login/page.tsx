@@ -80,8 +80,8 @@ export default function Login() {
       </div>
       <div className="flex h-full w-full flex-col items-center justify-center gap-4">
         <div className="flex h-full w-full max-w-xl flex-col items-center justify-center gap-4">
-          <h2 className="text-center">Sign In to your account</h2>
-          <h6 className="text-center">
+          <h2 className="text-center lg:text-2xl">Sign In to your account</h2>
+          <h6 className="text-center text-sm font-medium">
             Enter your email and Password to login.
           </h6>
           <div className="flex h-auto w-full flex-col gap-10 py-6">
