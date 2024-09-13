@@ -8,6 +8,7 @@ import { authOptions } from "@/lib/auth";
 import { Booking, BookingStatus, Role } from "@prisma/client";
 import GroupedBookingBySlot from "./booking/booking";
 import AllBookings from "./booking/all-bookings";
+import prisma from "@/lib/prisma";
 
 interface BookingResponse {
   bookingsCompleted: Booking[];

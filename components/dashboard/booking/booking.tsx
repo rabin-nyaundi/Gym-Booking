@@ -1,4 +1,5 @@
 import { BookingStatus } from "@prisma/client";
+import prisma from "@/lib/prisma";
 
 async function getTrainingSessions() {
   const today = new Date();

@@ -275,7 +275,7 @@ function BookingListView({ bookings }: { bookings: BookingSession[] }) {
         role="list"
         className="mt-3 grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2"
       >
-        {bookings &&
+        {bookings && bookings.length ? (
           bookings.map((booking) => (
             <li
               key={booking.id}
@@ -359,7 +359,12 @@ function BookingListView({ bookings }: { bookings: BookingSession[] }) {
                 </div>
               </div>
             </li>
-          ))}
+          ))
+        ) : (
+          <div className="flex justify-center">
+            <span className="text-xs text-gray-400">No records</span>
+          </div>
+        )}
       </ul>
     </>
   );

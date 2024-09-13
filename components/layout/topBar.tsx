@@ -17,11 +17,15 @@ export default function TopBar() {
   const { setTheme } = useTheme();
   return (
     <div className="flex flex-col w-full h-16 justify-center lg:px-10 bg-white dark:bg-inherit pr-2 border-b">
-      <div className="flex justify-end items-center">
+      <div className="flex justify-between lg:justify-end items-center">
         {/* Topbar */}
+
+        <div className="lg:hidden flex px-2">
+          <h4 className="font-bold text-xl">JWC</h4>
+        </div>
         <div className="flex items-center justify-center gap-4">
           <Button
-            className="gap-2"
+            className="gap-2 font-semibold"
             variant={"outline"}
             size={"sm"}
             onClick={async () => {

@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  name          String
+  email         String         @unique
+  password      String
+  roleId        String         @default("user")
+  role          Role           @default(USER)
+  bookings      Booking[]
+  notifications Notification[]
+  Session       Session[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  userRoleId    String?
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    Int
+  message   String
+  sentAt    DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TrainingSession {
+  id        Int       @id @default(autoincrement())
+  slot      String
+  capacity  Int       @default(5)
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Booking {
+  id           String          @id @default(uuid())
+  userId       Int
+  sessionId    Int
+  trainingDate DateTime
+  user         User            @relation(fields: [userId], references: [id])
+  session      TrainingSession @relation(fields: [sessionId], references: [id])
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  status       BookingStatus   @default(Booked)
+
+  @@unique([userId, trainingDate]) // Ensures one booking per user per day
+}
+
+enum Role {
+  USER
+  SALES_USER
+  ADMIN
+  SUPERADMIN
+}
+
+enum BookingStatus {
+  Booked
+  Cancelled
+  Rejected
+  Deleted
+}
